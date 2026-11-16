@@ -6,6 +6,7 @@ import argparse
 import csv
 import hashlib
 import json
+import math
 import os
 import platform
 import random
@@ -228,8 +229,8 @@ def main():
     tests = check()
     if args.mode=='check':
         print(f'Пройдено {len(tests)} проверок; из них 8 внешних векторов.'); return
-    if args.repeats<4 or args.trials<2 or args.target<=0:
-        ap.error('Нужны repeats >= 4, trials >= 2, target > 0')
+    if args.repeats<4 or args.trials<2 or not math.isfinite(args.target) or args.target<=0:
+        ap.error('Нужны repeats >= 4, trials >= 2, target должен быть конечным числом > 0')
     if args.out.exists() and any(args.out.iterdir()):
         ap.error('Папка результатов не пуста; укажите новую, чтобы сохранить предыдущий опыт')
     args.out.mkdir(parents=True,exist_ok=True)

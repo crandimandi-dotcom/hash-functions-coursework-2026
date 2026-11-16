@@ -29,8 +29,12 @@ def draw(folder, kind):
         label = 'Скорость, MiB/s'
     else:
         x = lambda v:{16:200,64:520,1024:840}[v]
-        y = lambda v:y0+h-(v-49)/2*h
-        yticks = [49,49.5,50,50.5,51]
+        means=[float(row['mean_percent']) for row in rows]
+        low=min(49,math.floor(min(means)*2)/2)
+        high=max(51,math.ceil(max(means)*2)/2)
+        y = lambda v:y0+h-(v-low)/(high-low)*h
+        step=max(0.5,math.ceil((high-low)/4*2)/2)
+        yticks = [low+i*step for i in range(int((high-low)/step)+1)]
         xticks = [(16,'16 байт'),(64,'64 байта'),(1024,'1024 байта')]
         label = 'Средняя доля, %'
     for tick in yticks:
